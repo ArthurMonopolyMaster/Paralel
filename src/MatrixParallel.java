@@ -52,5 +52,19 @@ public class MatrixParallel {
 
         fillMatrix(A);
         fillMatrix(B);
+        long startTime, endTime;
+
+        // ВИКОНАННЯ БЕЗ ПАРАЛЕЛІЗАЦІЇ
+        startTime = System.nanoTime();
+        addMatrixSequential(A, B, C, k);
+        endTime = System.nanoTime();
+        System.out.printf("Sequential Time: %.5f seconds.\n", (endTime - startTime) / 1e9);
+
+        // ВИКОНАННЯ З ПАРАЛЕЛІЗАЦІЄЮ
+   /*     startTime = System.nanoTime();
+        addMatrixParallel(A, B, C, k, threadsNum);
+        endTime = System.nanoTime();
+        System.out.printf("Parallel Time (%d threads): %.5f seconds.\n", threadsNum, (endTime - startTime) / 1e9);
+*/
     }
 }
