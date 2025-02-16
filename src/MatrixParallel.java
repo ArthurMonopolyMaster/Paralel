@@ -1,4 +1,7 @@
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 public class MatrixParallel {
@@ -11,6 +14,31 @@ public class MatrixParallel {
         }
     }
 
+    public static void addMatrixSequential(int[][] A, int[][] B, int[][] C, int k) {
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < A[0].length; j++) {
+                C[i][j] = A[i][j] + k * B[i][j];
+            }
+        }
+    }
+
+    public static void addMatrixParallel(int[][] A, int[][] B, int[][] C, int k, int threadsNum) {
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNum);
+        for (int i = 0; i < A.length; i++) {
+            int row = i;
+            executor.execute(() -> {
+                for (int j = 0; j < A[0].length; j++) {
+                    C[row][j] = A[row][j] + k * B[row][j];
+                }
+            });
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         int n = 10000;
